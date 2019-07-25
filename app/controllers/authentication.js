@@ -135,16 +135,16 @@ exports.forgot_password = function(req, res) {
             var smtpTransport = nodemailer.createTransport({
               service: 'gmail',
               auth: {
-                user: 'lacervoiserie17000@gmail.com',
-                pass: 'Boiteacom17!'
+                user: 'application.lacervoiserie@gmail.com',
+                pass: 'Boiteacom17!LC'
               }
             });
 
             var data = {
                 to: email,
-                from: 'lacervoiserie17000@gmail.com',
+                from: 'application.lacervoiserie@gmail.com',
                 subject: 'La Cervoiserie - Mot de passe oublié',
-                html: '<!DOCTYPE html><html><head><title>La Cervoiserie - Mot de passe oublié</title></head><body><div><h3>Bonjour,</h3><p>Vous avez demandé une réinitialisation de votre mot de passe, merci de l’utiliser <a href="http://pizza-re.com/LC?token='+token+'">ce lien</a> pour réinitialiser votre mot de passe.</p><br><p>La Cervoiserie</p></div></body></html>'
+                html: '<!DOCTYPE html><html><head><title>La Cervoiserie - Mot de passe oublié</title></head><body><div><h3>Bonjour,</h3><p>Vous avez demandé une réinitialisation de votre mot de passe, merci de l’utiliser <a href="http://www.lacervoiserie.com/application?token='+token+'">ce lien</a> pour réinitialiser votre mot de passe.</p><br><p>La Cervoiserie</p></div></body></html>'
             };
 
             smtpTransport.sendMail(data, function(err) {
@@ -250,6 +250,10 @@ exports.reset_password = function(req, res, next) {
 
                         console.log(user_tempo);
                         User.findOneAndUpdate({reset_password_token: req.body.token},{ $set: { reset_password_token: "undefined", reset_password_expires: "undefined", password: user_tempo }}, function(err2, existingUser2){
+                            
+                            if(err2){
+                              return res.status(404).send("Désolé, il y a eu une erreur...");
+                            }
                             console.log(existingUser2);
                         });
              
